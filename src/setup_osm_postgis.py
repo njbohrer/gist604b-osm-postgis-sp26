@@ -108,7 +108,30 @@ cur.close()
 conn.close()
 
 print("Closed connection to 'postgres'")
-    # Step 4: Create the working database
+ # Establish a connection to the working database
+conn = psycopg2.connect(
+    dbname=db_name,
+    user="postgres",
+    password="postgres",
+    host="localhost",
+    port=5432
+)
+
+# Every SQL statement is executed immediately
+conn.autocommit = True
+
+# Open a cursor to perform database operations
+cur = conn.cursor()
+
+print(f"Connected to database: {db_name}")
+
+# Create extension if it does not exist
+cur.execute("CREATE EXTENSION IF NOT EXISTS postgis;")
+
+# Check PostGIS version
+cur.execute("SELECT PostGIS_version();")
+version = cur.fetchone()
+print("PostGIS version:", version) 
     # Step 5: Connect to the new database
     # Step 6: Enable PostGIS
     # Step 7: Unzip shapefile data
