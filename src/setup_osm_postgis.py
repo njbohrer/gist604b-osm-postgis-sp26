@@ -60,14 +60,35 @@ def setup_osm_postgis(
     """
 
     # TODO: Implement this function
-  import os
+import os
 import requests
 import subprocess
 import psycopg2
 import zipfile
 
 print("Libraries imported!")
-    # Step 2: Download shapefile ZIP data
+# Establish a connection to the postgres database
+conn = psycopg2.connect(
+    dbname="postgres",
+    user="postgres",
+    password="postgres",
+    host="localhost",
+    port=5432
+)
+
+# Every SQL statement is executed immediately
+conn.autocommit = True
+
+# Open a cursor to perform database operations
+cur = conn.cursor()
+
+# Check current database by using PostgreSQL built-in function
+cur.execute("SELECT current_database();")
+
+# Use fetchone() to return one row from the result of the query
+print("Current database:", cur.fetchone()[0])
+
+print("Connected to PostgreSQL server")
     # Step 3: Connect to PostgreSQL (default database)
     # Step 4: Create the working database
     # Step 5: Connect to the new database
@@ -77,4 +98,4 @@ print("Libraries imported!")
     # Step 9: Close connections
 
     # IMPORTANT: Remove this line after correctly implementing the function.
-    raise NotImplementedError("setup_osm_postgis() is not implemented. Complete this function before running it.")
+raise NotImplementedError("setup_osm_postgis() is not implemented. Complete this function before running it.")
