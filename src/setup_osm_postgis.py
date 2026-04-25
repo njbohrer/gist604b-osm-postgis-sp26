@@ -89,7 +89,25 @@ cur.execute("SELECT current_database();")
 print("Current database:", cur.fetchone()[0])
 
 print("Connected to PostgreSQL server")
-    # Step 3: Connect to PostgreSQL (default database)
+db_name = "arizona"
+
+# Check if database name already exists
+cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{db_name}';")
+
+# fetchone() returns a row if it exists, otherwise None
+exists = cur.fetchone()
+
+if not exists:
+    cur.execute(f"CREATE DATABASE {db_name};")
+    print(f"Database '{db_name}' created")
+else:
+    print(f"Database '{db_name}' already exists")
+
+# Close connection to 'postgres' before switching databases
+cur.close()
+conn.close()
+
+print("Closed connection to 'postgres'")
     # Step 4: Create the working database
     # Step 5: Connect to the new database
     # Step 6: Enable PostGIS
