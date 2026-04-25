@@ -190,7 +190,49 @@ if not os.path.exists(extract_path):
 else:
     print("Extracted folder already exists:")
     print(extract_path)
-    # Step 7: Unzip shapefile data
+# List of shapefiles to load
+load_shapefiles = [
+    "places_a", 
+    "railways",
+    "landuse_a",
+    "pois",
+    "adminareas_a",
+    "roads"]
+
+# Set password so shp2pgsql/psql does not prompt
+env = os.environ.copy()
+env["PGPASSWORD"] = "postgres"
+
+# Find all .shp files
+shp_files = [f for f in os.listdir(extract_path) if f.endswith(".shp")]
+
+# Loop through shapefiles and load them
+for shp_file in shp_files:
+    filename = os.path.splitext(shp_file)[0]
+
+    table_name = (
+        filename
+        .replace("gis_osm_", "")
+        .replace("_free_1", "")
+    )
+
+    # Skip shapefiles that are not in our load list
+    if table_name not in load_shapefiles: continue
+
+    shp_path = os.path.join(extract_path, shp_file)
+
+    print(f"\nLoading {table_name} from {filename}...")
+
+    cmd = f'shp2pgsql -d -I -s 4326 "{shp_path}" public.{table_name} | psql -h localhost -U postgres -d {db_name}'
+
+    print("Command:", cmd)
+
+    try:
+        subprocess.run(cmd, shell=True, env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+        print(f"{table_name} loaded successfully")
+    except subprocess.CalledProcessError as e:
+        print(f"{table_name} failed")
+        print(e.stderr.splitlines()[-1])  # show only last error line
     # Step 8: Load shapefiles into PostGIS using shp2pgsql
     # Step 9: Close connections
 
