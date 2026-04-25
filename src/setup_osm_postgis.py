@@ -179,7 +179,17 @@ else:
     # Skip download if file already exists locally
     print("File already exists:")
     print(zip_path)
-    # Step 6: Enable PostGIS
+extract_path = os.path.join(data_path, "shapefiles")
+
+if not os.path.exists(extract_path):
+    print("Extracting shapefiles...")
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(extract_path)
+    print("Extraction complete")
+    print("Extracted to:", extract_path)
+else:
+    print("Extracted folder already exists:")
+    print(extract_path)
     # Step 7: Unzip shapefile data
     # Step 8: Load shapefiles into PostGIS using shp2pgsql
     # Step 9: Close connections
