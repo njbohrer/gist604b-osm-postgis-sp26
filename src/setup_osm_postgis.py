@@ -60,7 +60,13 @@ def setup_osm_postgis(
     """
 
     # TODO: Implement this function
-    # Step 1: Setup data directory
+  import os
+import requests
+import subprocess
+import psycopg2
+import zipfile
+
+print("Libraries imported!")
     # Step 2: Download shapefile ZIP data
     # Step 3: Connect to PostgreSQL (default database)
     # Step 4: Create the working database
