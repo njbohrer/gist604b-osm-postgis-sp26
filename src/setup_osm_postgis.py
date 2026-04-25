@@ -132,7 +132,53 @@ cur.execute("CREATE EXTENSION IF NOT EXISTS postgis;")
 cur.execute("SELECT PostGIS_version();")
 version = cur.fetchone()
 print("PostGIS version:", version) 
-    # Step 5: Connect to the new database
+osm_url = "https://download.geofabrik.de/north-america/us/arizona-latest-free.shp.zip"
+
+# Define local directory to store OSM data
+data_path = f"../data/{db_name}"
+
+# Create directory if it does not exist
+os.makedirs(data_path, exist_ok=True)
+
+# Construct full file path using the filename from the URL
+zip_path = os.path.join(data_path, osm_url.split("/")[-1])
+
+# Download file only if it does not already exist
+if not os.path.exists(zip_path):
+    print("Downloading OSM data...")
+    print("URL:", osm_url)
+
+    # Send HTTP request (stream=True downloads in chunks)
+    response = requests.get(osm_url, stream=True, timeout=300)
+    # Raise error if download fails
+    response.raise_for_status()
+    
+    # Get total file size (if available) for progress tracking
+    file_size = int(response.headers.get("content-length", 0))
+    if file_size > 0:
+        print(f"File size: {file_size / (1024 * 1024):.1f} MB")
+
+    downloaded = 0
+    
+    # Open file in binary write mode
+    with open(zip_path, "wb") as f:
+        # Download file in chunks to avoid loading entire file into memory
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
+                downloaded += len(chunk)
+                
+                # Display progress as percentage (if file size is known)
+                if file_size > 0:
+                    progress = downloaded / file_size * 100
+                    print(f"\rProgress: {progress:.1f}%", end="", flush=True)
+
+    print("\nDownload complete")
+    print("Saved to:", zip_path)
+else:
+    # Skip download if file already exists locally
+    print("File already exists:")
+    print(zip_path)
     # Step 6: Enable PostGIS
     # Step 7: Unzip shapefile data
     # Step 8: Load shapefiles into PostGIS using shp2pgsql
