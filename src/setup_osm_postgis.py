@@ -233,7 +233,35 @@ for shp_file in shp_files:
     except subprocess.CalledProcessError as e:
         print(f"{table_name} failed")
         print(e.stderr.splitlines()[-1])  # show only last error line
-    # Step 8: Load shapefiles into PostGIS using shp2pgsql
+list_query = """
+SELECT table_name 
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY table_name;
+"""
+
+# Execute the query
+cur.execute(list_query)
+
+# Retrieve all table names
+tables = [t[0] for t in cur.fetchall()]
+print("Tables created:", tables)
+
+# Row counts for all tables (not hardcoded)
+for table in tables:
+    try:
+        cur.execute(f'SELECT COUNT(*) FROM "{table}";')
+        count = cur.fetchone()[0]
+        print(f"{table}: {count} rows")
+    except Exception as e:
+        print(f"{table}: error")
+        print(e)
+
+# Close the database connection
+cur.close()
+conn.close()
+
+print("Database connection closed")
     # Step 9: Close connections
 
     # IMPORTANT: Remove this line after correctly implementing the function.
