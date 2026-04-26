@@ -1,0 +1,1 @@
+SELECT * FROM protectedareas LIMIT 10;
