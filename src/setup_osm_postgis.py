@@ -191,16 +191,18 @@ else:
     print("Extracted folder already exists:")
     print(extract_path)
 # List of shapefiles to load
-load_shapefiles = [
-    "places", 
-    "railway",
+load_shapefiles=[
+    "places",
+    "railways",
     "transport",
     "pois",
     "traffic",
-    "landuse",
-    "protected_areas",
-    "water",
-    "roads"]
+    "roads",
+    "landuse_a",
+    "adminareas_a",
+    "protected_areas_a",
+    "water_a"
+]
 
 # Set password so shp2pgsql/psql does not prompt
 env = os.environ.copy()
