@@ -89,7 +89,7 @@ cur.execute("SELECT current_database();")
 print("Current database:", cur.fetchone()[0])
 
 print("Connected to PostgreSQL server")
-db_name = "alaska"
+db_name = "alaska2"
 
 # Check if database name already exists
 cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{db_name}';")
