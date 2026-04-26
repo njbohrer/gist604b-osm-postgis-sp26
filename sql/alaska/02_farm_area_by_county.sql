@@ -1,5 +1,10 @@
 --Taking the county level across Alaska and calculating the sq km of farm area for each
 
+SELECT current_database();
+
+SELECT f_table_name, type
+FROM geometry_columns
+ORDER BY f_table_name;
 
 SELECT
     aa.name AS county_name,
