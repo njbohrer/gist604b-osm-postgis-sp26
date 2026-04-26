@@ -89,7 +89,7 @@ cur.execute("SELECT current_database();")
 print("Current database:", cur.fetchone()[0])
 
 print("Connected to PostgreSQL server")
-db_name = "arizona"
+db_name = "alaska"
 
 # Check if database name already exists
 cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{db_name}';")
@@ -132,7 +132,7 @@ cur.execute("CREATE EXTENSION IF NOT EXISTS postgis;")
 cur.execute("SELECT PostGIS_version();")
 version = cur.fetchone()
 print("PostGIS version:", version) 
-osm_url = "https://download.geofabrik.de/north-america/us/arizona-latest-free.shp.zip"
+osm_url = "https://download.geofabrik.de/north-america/us/alaska-latest-free.shp.zip"
 
 # Define local directory to store OSM data
 data_path = f"../data/{db_name}"
@@ -192,11 +192,14 @@ else:
     print(extract_path)
 # List of shapefiles to load
 load_shapefiles = [
-    "places_a", 
-    "railways",
-    "landuse_a",
+    "places", 
+    "railway",
+    "transport",
     "pois",
-    "adminareas_a",
+    "traffic",
+    "landuse",
+    "protected_area",
+    "water",
     "roads"]
 
 # Set password so shp2pgsql/psql does not prompt
