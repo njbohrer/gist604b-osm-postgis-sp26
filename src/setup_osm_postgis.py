@@ -198,7 +198,7 @@ load_shapefiles = [
     "pois",
     "traffic",
     "landuse",
-    "protected_area",
+    "protected_areas",
     "water",
     "roads"]
 
