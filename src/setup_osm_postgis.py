@@ -264,5 +264,5 @@ conn.close()
 print("Database connection closed")
     # Step 9: Close connections
 
-    # IMPORTANT: Remove this line after correctly implementing the function.
-raise NotImplementedError("setup_osm_postgis() is not implemented. Complete this function before running it.")
+
+
